@@ -36,6 +36,11 @@ class Post extends Model
         ]);
     }
 
+    public function getSearchIndex()
+    {
+        return 'posts';
+    }
+    
     public function toSearchArray()
     {
         return [
