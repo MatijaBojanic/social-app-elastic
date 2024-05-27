@@ -40,7 +40,7 @@ class Post extends Model
     {
         return 'posts';
     }
-    
+
     public function toSearchArray()
     {
         return [
@@ -49,5 +49,24 @@ class Post extends Model
             'body' => $this->body,
             'user_id' => $this->user_id
         ];
+    }
+
+    public static function search($query = '')
+    {
+        $elasticsearch = app('elasticsearch');
+        $items = $elasticsearch->search([
+            'index' => 'posts',
+            'body'  => [
+                'query' => [
+                    'multi_match' => [
+                        'query' => $query,
+                        'fields' => ['title^5', 'body'],
+                        'fuzziness' => 'AUTO',
+                    ],
+                ],
+            ],
+        ]);
+
+        return collect($items['hits']['hits'])->pluck('_source')->toArray();
     }
 }

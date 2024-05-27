@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Models\Post;
-use Elastic\Elasticsearch\Client;
 use Illuminate\Console\Command;
 
 class SearchReindexCommand extends Command
@@ -28,7 +27,7 @@ class SearchReindexCommand extends Command
         {
             $this->elasticsearch->index([
                 'index' => $post->getSearchIndex(),
-                'type' => $post->getSearchType(),
+//                'type' => $post->getSearchType(),
                 'id' => $post->getKey(),
                 'body' => $post->toSearchArray(),
             ]);
