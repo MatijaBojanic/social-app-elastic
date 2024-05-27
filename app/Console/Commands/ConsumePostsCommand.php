@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Post;
 use Illuminate\Console\Command;
 use Junges\Kafka\Contracts\KafkaConsumerMessage;
 use Junges\Kafka\Facades\Kafka;
@@ -41,7 +42,19 @@ class ConsumePostsCommand extends Command
     private function createConsumer()
     {
         return Kafka::createConsumer()->withHandler(function (KafkaConsumerMessage $message) {
-            logger($message->getBody());
+
+            logger('TESTING POST INJECTION');
+            $body = $message->getBody();
+            logger($body);
+
+            Post::create([
+                'user_id' => $body['user_id'],
+                'title' => $body['title'],
+                'body' => $body['body'],
+            ]);
+
+            logger("CREATED POST");
+
         })->subscribe(self::TOPIC_NAME)->build();
     }
 
