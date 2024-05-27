@@ -9,8 +9,8 @@ class PostController extends Controller
 {
     public function search(Request $request)
     {
-//        $response = Post::search($request->value);
-        $response = true;
+        $response = Post::search($request->value);
+
         return response()->json($response);
     }
 }
