@@ -40,8 +40,14 @@ class ConsumeCommentsCommand extends Command
 
     private function createConsumer()
     {
-        return Kafka::createConsumer()->withHandler(function (KafkaConsumerMessage $message) {
+        return Kafka::createConsumer()
+            ->withConsumerGroupId('elastic-group')
+            ->withHandler(function (KafkaConsumerMessage $message) {
+
+
             logger($message->getBody());
+
+
         })->subscribe(self::TOPIC_NAME)->build();
     }
 

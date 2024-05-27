@@ -17,3 +17,6 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+// perform search on posts:
+Route::post('search/posts', [\App\Http\Controllers\PostController::class, 'search']);
