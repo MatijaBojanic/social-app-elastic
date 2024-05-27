@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\User;
 use Illuminate\Console\Command;
 use Junges\Kafka\Contracts\KafkaConsumerMessage;
 use Junges\Kafka\Facades\Kafka;
@@ -45,6 +46,12 @@ class ConsumeUsersCommand extends Command
 
             logger($message->getBody());
 
+            User::create([
+                'name' => $message->getBody()['name'],
+                'email' => $message->getBody()['email']
+            ]);
+
+            logger("User created from kafka message");
 
         })->subscribe(self::TOPIC_NAME)->build();
     }
