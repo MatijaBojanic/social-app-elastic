@@ -19,4 +19,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // perform search on posts:
-Route::post('search/posts', [\App\Http\Controllers\PostController::class, 'search']);
+Route::post('posts/search', [\App\Http\Controllers\PostController::class, 'search']);
+
+Route::post('users/search', [\App\Http\Controllers\UserController::class, 'search']);
