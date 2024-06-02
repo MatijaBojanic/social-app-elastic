@@ -17,6 +17,8 @@ class User extends Model
     protected $fillable = [
         'name',
         'email',
+        'username',
+        'uuid'
     ];
 
     public static function boot()
@@ -38,7 +40,7 @@ class User extends Model
 
         $elasticsearch->index([
             'index' => 'users',
-            'id' => $this->id,
+            'id' => $this->uuid,
             'body' => $this->toSearchArray()
         ]);
     }
@@ -51,10 +53,10 @@ class User extends Model
     public function toSearchArray()
     {
         return [
-            'id' => $this->id,
-            'title' => $this->name,
-            'body' => $this->email,
-            'user_id' => $this->created_at
+            'uuid' => $this->uuid,
+            'name' => $this->name,
+            'email' => $this->email,
+            'username' => $this->username
         ];
     }
 
@@ -67,7 +69,7 @@ class User extends Model
                 'query' => [
                     'multi_match' => [
                         'query' => $query,
-                        'fields' => ['title^5', 'name'],
+                        'fields' => ['username^5', 'name', 'email'],
                         'fuzziness' => 'AUTO',
                     ],
                 ],

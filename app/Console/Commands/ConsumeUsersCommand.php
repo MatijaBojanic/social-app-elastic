@@ -48,7 +48,9 @@ class ConsumeUsersCommand extends Command
 
             User::create([
                 'name' => $message->getBody()['name'],
-                'email' => $message->getBody()['email']
+                'email' => $message->getBody()['email'],
+                'uuid' => $message->getBody()['uuid'],
+                'username' => $message->getBody()['username']
             ]);
 
             logger("User created from kafka message");

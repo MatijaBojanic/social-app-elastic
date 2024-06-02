@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Console\Command;
 
 class SearchReindexCommand extends Command
@@ -30,6 +31,18 @@ class SearchReindexCommand extends Command
 //                'type' => $post->getSearchType(),
                 'id' => $post->getKey(),
                 'body' => $post->toSearchArray(),
+            ]);
+
+            // PHPUnit-style feedback
+            $this->output->write('.');
+        }
+
+        foreach(User::get() as $user)
+        {
+            $this->elasticsearch->index([
+                'index' => $user->getSearchIndex(),
+                'id' => $user->uuid,
+                'body' => $user->toSearchArray(),
             ]);
 
             // PHPUnit-style feedback
