@@ -67,11 +67,25 @@ class User extends Model
             'index' => 'users',
             'body'  => [
                 'query' => [
-                    'multi_match' => [
-                        'query' => $query,
-                        'fields' => ['username^5', 'name', 'email'],
-                        'fuzziness' => 'AUTO',
-                    ],
+                    'bool' => [
+                        'should' => [
+                            [
+                                'wildcard' => [
+                                    'username' => '*' . $query . '*'
+                                ]
+                            ],
+                            [
+                                'match' => [
+                                    'name' => $query
+                                ]
+                            ],
+                            [
+                                'match' => [
+                                    'email' => $query
+                                ]
+                            ]
+                        ]
+                    ]
                 ],
             ],
         ]);
